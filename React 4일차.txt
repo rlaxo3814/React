@@ -1,0 +1,110 @@
+
+React 4일차 상세 페이지 만들어보기
+Mode UI디자인하기
+<Mode></Mode>
+HTML을 한 단어로 줄여서 쓸수 있는 방법: 리액트의 Component문법
+
+Component 만드는 법
+어떤걸 Component로 만든게 좋을까 -반복출현하는 Html덩어리들, 자주 변경되는  HTMl UI들, 다른 페이지 만들 때도 컴포넌트로 만들 면 좋음
+단점: state 쓸 때 복잡해짐
+
+1.함수 만들고 이름짓고(이름은 대문자로 시작)
+2.축약을 원하는 HTML 넣고
+3.원하는 곳에서<함수명></함수명> or <함수명/>
+4.return () 안에 있는건 태그하나로 묶어야함
+function Mode(){
+  return(
+    
+    <div className="mode">
+    <h2>제목<span> REACT 사용법 </span></h2>
+    <p>날짜<span> 2022-03-15 </span></p>
+    <p>상세내용<span> REACT의 기본원리와 문법 </span></p>
+    </div>
+    
+  )
+}
+
+Fragement문법
+return()내부를 묶을 때 의미없는 <div>쓰기 싫으면 <></>
+
+function Mode(){
+  return(
+    <>
+    <div className="mode">
+    <h2>제목<span> REACT 사용법 </span></h2>
+    <p>날짜<span> 2022-03-15 </span></p>
+    <p>상세내용<span> REACT의 기본원리와 문법 </span></p>
+    </div>
+    </>
+  )
+}
+
+App.js
+/* eslint-disable */
+
+import React, {useState} from 'react';
+import logo from './logo.svg';
+import './App.css';
+
+function App() {
+
+  let [글제목, 글제목변경] = useState(['남자 코트 추천', '강남 우동 맛집']);
+  let [글제목2, 글제목변경2] = useState(['이반꿀', '막창 맛집']);
+  let [좋아요, 좋아요변경] = useState(0);
+  let [좋아요2, 좋아요변경2] = useState(0);
+  let [좋아요3, 좋아요변경3] = useState(0);
+  let posts= '강남 고기 맛집';
+  
+  //function 제목바꾸기(){
+    //var newArray = [...글제목];
+    //newArray[0] = '여자 코트 추천';
+    //글제목변경(newArray);
+  //}
+
+  return (
+    <div className="App">
+     <div className="black-nav">
+       <div style={{ color : 'white', fontSize : '30px' }}>개발 Blog</div> 
+     </div>
+     <div className="list">
+     <h3>{ 글제목[0] }<span onClick={ ()=>{좋아요변경(좋아요 + 1) } }>👍</span>{좋아요}</h3>
+     <p>3월 13일 발행</p>
+     <hr/>
+    </div>
+    <div className="list">
+     <h3>{ 글제목2[0] }<span onClick={()=>{좋아요변경2(좋아요2 + 1) }}>👍</span>{좋아요2}</h3>
+     <p>3월 14일 발행</p>
+     <hr/>
+    </div>
+    <div className="list">
+     <h3>{ 글제목2[1] }<span onClick={()=>{좋아요변경3(좋아요3 + 1) }}>👍</span>{좋아요3}</h3>
+     <p>3월 15일 발행</p>
+     <hr/>
+    </div>
+
+   <Mode></Mode>
+    </div>
+  );
+}
+
+function Mode(){
+  return(
+    
+    <div className="mode">
+    <h2>제목<span> REACT 사용법 </span></h2>
+    <p>날짜<span> 2022-03-15 </span></p>
+    <p>상세내용<span> REACT의 기본원리와 문법 </span></p>
+    </div>
+    
+  )
+}
+
+export default App;
+
+App.css 가서 디자인하기
+
+.mode{
+  margin-top: 20px;
+  padding: 20px;
+  background: #eee;
+}
