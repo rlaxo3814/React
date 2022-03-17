@@ -1,0 +1,208 @@
+React 6일차
+<Mode/>안에 진짜 글제목 넣기
+
+function Mode(){
+	return(
+	<div className="mode">
+	<h2>제목{글제목[0]}</h2>
+	<p>날짜</p>
+	<p>상세내용</p>
+	</div>
+)
+}
+
+App은 부모컴포넌트
+<Mode>는 자식 컴포넌트
+부모컴포넌트가 자식컴포넌트 한테 props라는 문법을 이용해서 state 데이터를 전송해야 가능
+props로 자식에게 State 전해주는 법
+1.<자식컴포넌트 작명={state명}/>
+2. 자식컴포넌트에서 props파라미터 입력 후 사용
+
+1.
+   {
+      mode === true
+      ? <Mode 글제목= {글제목}></Mode> 
+      : null
+    }
+
+2.
+function Mode(props){
+  return(
+    
+    <div className="mode">
+    <h2>{props.글제목[1]}<span></span></h2>
+    <p>날짜<span> 2022-03-15 </span></p>
+    <p>상세내용<span></span></p>
+    </div>
+    
+  )
+}
+
+제목을 누를때 각각 다른 모드창이 뜨게
+
+각각 다른 모드창 제목 만드는 법
+-몇번째 제목 눌렀는지 상태정보를 state에 저장하고
+-state가 0일 때는 0번째 제목 출력
+-state가 1일 때는 1번째 제목 출력
+
+UI 만드는 법
+1. UI와 관련된 중요 정보들을 state로 저장해놓고 
+2. state에 따라서 UI가 수정되게 만들면 된다.
+
+버튼을 누를때 각각 다른 모드 창이 뜨게 할려면?
+<button onClick={ ()=>{} }>버튼1</button>
+<button onClick={ ()=>{}} >버튼2</button>
+<button onClick={ ()=>{}} >버튼3</button>
+
+function Mode(props){
+  return(
+    
+    <div className="mode">
+    <h2>{props.글제목[2]}<span></span></h2>
+    <p>날짜<span> 2022-03-15 </span></p>
+    <p>상세내용<span></span></p>
+    </div>
+    
+  )
+}
+
+
+let [누른제목, 누른제목변경] = useState(0);
+
+   {
+      mode === true
+      ? <Mode 글제목= {글제목} 누른제목={누른제목}></Mode> 
+      : null
+    }
+
+function Mode(props){
+  return(
+    
+    <div className="mode">
+    <h2>{props.글제목[props.누른제목변경]}<span></span></h2>
+    <p>날짜<span> 2022-03-15 </span></p>
+    <p>상세내용<span></span></p>
+    </div>
+    
+  )
+}
+
+<button onClick={ ()=>{누른제목변경(0)} }>버튼1</button>
+<button onClick={ ()=>{누른제목변경(1)}} >버튼2</button>
+<button onClick={ ()=>{누른제목변경(2)} >버튼3</button>
+
+이제 버튼을 누르면 누른제목 state가 변경됩니다
+그럼 <Mode>안의 누른제목도 변경됨
+
+<h3> 글제목을 누를때 각각 다른 모드창이 뜨게?
+ {
+      글제목.map(function(글, i){ //i라는 것은 반복문이 돌때 마다 0,1,2 가 되는 변수
+        return(<div className="list" key={i}>
+        <h3 onClick={()=>{누른제목변경(i)}}>{ 글 }<span onClick={ ()=>{좋아요변경(좋아요 + 1) } }>👍</span>{좋아요}</h3>
+        <p>3월 13일 발행</p>
+        <hr/>
+       </div>
+        )
+      })
+    }
+
+React에서 사용자 input을 받는 법
+//사용자가 input에 입력한 값을 state로 저장해보자
+let [입력값, 입력값변경] = useState('');  //''은 초기값(빈 문자열)
+<input onChange={ (e)=>{e.target.value} }/> //e.target이벤트가 동작한 곳 .value는 이벤트에 입력한 값 (e)는 파라미터
+
+사용자가 input에 입력한 값을 입력값 state로 저장해보자
+<input onChange={ (e)=>{입력값변경(e.target.value) } }/>
+
+map 반복문으로 돌린 HTML에는 key{}가 필요하다
+ {
+      글제목.map(function(글, i){
+        return(<div className="list" key={i}>
+        <h3 onClick={()=>{누른제목변경(i)}}>{ 글 }<span onClick={ ()=>{좋아요변경(좋아요 + 1) } }>👍</span>{좋아요}</h3>
+        <p>3월 13일 발행</p>
+        <hr/>
+       </div>
+        )
+      })
+    }
+
+App.js
+/* eslint-disable */
+
+import React, {useState} from 'react';
+import logo from './logo.svg';
+import './App.css';
+
+function App() {
+
+  let [글제목, 글제목변경] = useState(['남자 코트 추천', '이반꿀', '막창 맛집']);
+  
+  let [좋아요, 좋아요변경] = useState(0);
+  let [mode, mode변경] = useState(false);
+  let [누른제목, 누른제목변경] = useState(0);
+  let [입력값, 입력값변경] = useState('');
+
+
+  function 반복된UI(){
+    var 어레이 = [];
+    for(var i=0; i<3; i++){
+      어레이.push(<div>불장 가즈아~</div>);
+    }
+
+    return 어레이
+  }
+  let posts= '강남 고기 맛집';
+  
+  //function 제목바꾸기(){
+    //var newArray = [...글제목];
+    //newArray[0] = '여자 코트 추천';
+    //글제목변경(newArray);
+  //}
+
+  return (
+    <div className="App">
+     <div className="black-nav">
+       <div style={{ color : 'white', fontSize : '30px' }}>개발 Blog</div> 
+     </div>
+
+    {
+      글제목.map(function(글, i){
+        return(<div className="list" key={i}>
+        <h3 onClick={()=>{누른제목변경(i)}}>{ 글 }<span onClick={ ()=>{좋아요변경(좋아요 + 1) } }>👍</span>{좋아요}</h3>
+        <p>3월 13일 발행</p>
+        <hr/>
+       </div>
+        )
+      })
+    }
+    { 반복된UI()}
+    <button onClick={()=>{누른제목변경(0)}}>버튼1</button>
+    <button onClick={()=>{누른제목변경(1)}}>버튼2</button>
+    <button onClick={()=>{누른제목변경(2)}}>버튼3</button>
+    <input onChange={ (e)=>{입력값변경(e.target.value)} }/>
+
+    <button onClick={()=>{mode변경(!mode)}}>열고닫기</button>
+
+    {
+      mode === true
+      ? <Mode 글제목= {글제목} 누른제목 = {누른제목}></Mode> 
+      : null
+    }
+
+    </div>
+  );
+}
+
+function Mode(props){
+  return(
+    
+    <div className="mode">
+    <h2>{props.글제목[props.누른제목]}<span></span></h2>
+    <p>날짜<span> 2022-03-15 </span></p>
+    <p>상세내용<span></span></p>
+    </div>
+    
+  )
+}
+
+export default App;
