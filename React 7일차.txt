@@ -1,0 +1,219 @@
+React 7일차
+
+블로그 글 발행 기능을 만들어 보자
+
+글발행 기능 만들기
+-사용자가 입력한 글 state로 저장하기
+-서버로 먼저 보내서 영구저장 하기(ajax)
+-이제 버튼 누르면 어찌하면 될까요
+-버튼 누르면 입력한 글 state를 글제목 state에 추가
+state 데이터는  =등호로 직접 수정하면 안됨 사본을 만들어서 그걸 수정하셈
+그리고 버튼을 누르면 글이 하나가 추가된다
+
+	
+<button onClick={()=>{
+	var arrayCopy = [...글제목];
+	arrayCopy.unshift(입력값);
+	글제목변경(arrayCopy);
+}}>저장</button>
+
+
+App.js
+
+<div className="publish">
+	<input onChange={(e)=>{입력값변경(e.targert.value)}}/>
+	<button onClick={()=>{
+	var arrayCopy = [...글제목];
+	arrayCopy.unshift(입력값);
+	글제목변경(arrayCopy);
+}}>저장</button>
+</div>
+
+App.css
+.publish{
+	margin-top: 30px;
+	margin-bottom: 30px;
+}
+
+.publish input{
+	padding: 10px;
+	font-size: 16px;
+	border-radius: 5px;
+	width: 80%;
+	border: 1px solid grey;
+}
+
+.publish button{
+	display: block;
+	magin: auto;
+	margin-top: 10px;
+}
+
+-실제 개발시 예전 코드 수정 할 일 있으니까
+
+
+
+
+********예전 리액트 문법*********
+component 만드는 기본 문법
+class: 변수/함수 보관하는 덩어리
+extends: 오른쪽에 있는 놈의 성질을 물려 받는 것
+state는 constructor 안에 작성
+constructor : class의 변수/초기값 저장할 때 씁니다.
+버튼을 누르면 state를 변경해보자
+이전 문법은 setState(변경할state)
+-setState(변경할 state만 넣기)
+
+class Profile extends React.Component{
+	constructor(){
+	super();
+	this.state ={name : 'kim', age : 33}
+}
+
+	render(){
+	retrun(
+	<div>프로필입니다</div>
+	<p>저는 {this.state.name}입니다.</p>
+	<button onClick={()=>{this.setState({name : 'Lee'})}}>버튼</button>
+)
+}
+
+}
+
+그리고  다음에는 아무 데나  <Profile/> 집어 넣으면 프로필입니다 글이 UI창에 뜸
+function App(){
+
+	<Profile/>
+}
+
+
+함수 만들기
+class Profile extends React.Component{
+	constructor(){
+	super();
+	this.state ={name : 'kim', age : 33}
+}
+
+changeName(){
+this.setState({name : 'Lee'})
+}
+	render(){
+	retrun(
+	<div>프로필입니다</div>
+	<p>저는 {this.state.name}입니다.</p>
+	<button onClick={this.changeName.bind(this)}>버튼</button>
+)
+}
+}
+
+
+
+
+App.js
+/* eslint-disable */
+
+import React, {useState} from 'react';
+import logo from './logo.svg';
+import './App.css';
+
+function App() {
+
+  let [글제목, 글제목변경] = useState(['남자 코트 추천', '이반꿀', '막창 맛집']);
+  
+  let [좋아요, 좋아요변경] = useState(0);
+  let [mode, mode변경] = useState(false);
+  let [누른제목, 누른제목변경] = useState(0);
+  let [입력값, 입력값변경] = useState('');
+
+
+  function 반복된UI(){
+    var 어레이 = [];
+    for(var i=0; i<3; i++){
+      어레이.push(<div>불장 가즈아~</div>);
+    }
+
+    return 어레이
+  }
+  let posts= '강남 고기 맛집';
+  
+  //function 제목바꾸기(){
+    //var newArray = [...글제목];
+    //newArray[0] = '여자 코트 추천';
+    //글제목변경(newArray);
+  //}
+
+  return (
+    <div className="App">
+     <div className="black-nav">
+       <div style={{ color : 'white', fontSize : '30px' }}>개발 Blog</div> 
+     </div>
+
+    {
+      글제목.map(function(글, i){
+        return(<div className="list" key={i}>
+        <h3 onClick={()=>{누른제목변경(i)}}>{ 글 }<span onClick={ ()=>{좋아요변경(좋아요 + 1) } }>👍</span>{좋아요}</h3>
+        <p>3월 13일 발행</p>
+        <hr/>
+       </div>
+        )
+      })
+    }
+    
+   <div className="publish">
+     <input onChange={(e)=>{입력값변경(e.target.value)}}/>
+     <button onClick={()=>{
+       var arrayCopy = [...글제목];
+       arrayCopy.unshift(입력값);
+       글제목변경(arrayCopy);
+     }}>저장</button>
+   </div>
+
+     <Profile/>
+    
+    <button onClick={()=>{mode변경(!mode)}}>열고닫기</button>
+
+    {
+      mode === true
+      ? <Mode 글제목= {글제목} 누른제목 = {누른제목}></Mode> 
+      : null
+    }
+
+    </div>
+  );
+}
+
+function Mode(props){
+  return(
+    
+    <div className="mode">
+    <h2>{props.글제목[props.누른제목]}<span></span></h2>
+    <p>날짜<span> 2022-03-15 </span></p>
+    <p>상세내용<span></span></p>
+    </div>
+    
+  )
+}
+
+class Profile extends React.Component{
+  constructor(){
+    super();
+    this.state = {name : 'kim', age : 30}
+  }
+
+  changeName(){
+    this.setState({name : 'Lee'})
+  }
+
+  render(){
+    return(
+      <div>
+        <h3>프로필입니다</h3>
+        <p>저는 {this.state.name}입니다.</p>
+      <button onClick={ this.changeName.bind(this)}>버튼</button>
+      </div>
+    )
+  }
+
+}
+
+export default App;
