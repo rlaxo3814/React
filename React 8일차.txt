@@ -1,0 +1,135 @@
+React 8일차
+
+쇼핑몰 프로젝트 
+새로운 프로젝트 생성
+터미널 열어서 
+지금 쓰고 있는 프로젝트 닫는거는 ctrl+c(ctrl+x) 2번 3번 눌러주기 그다음 Y 엔터 치면됨
+그다음 작업폴더 열기 나는 C드라이브에 React class 폴더로 열기
+그다음 터미널에 npx create-react-app shop(내가 만들 프로젝트 이름)
+
+구글에  yarn 검색하면 yarn installer 들어가서 1.22 버전 설치하기 windows 버전 yarn 2버전은 아직 에러가 많음
+그 다음 터미널로 와서 shop이라는 프로젝트 폴더 오픈하기
+
+App.js
+안에 
+function App(){
+	return(
+	<div className="App">
+	</div>
+	);
+}
+
+export default App;
+빼고 다 지우기
+
+그다음 터미널 시작하기
+yarn start 또는 npm start 하면 구글 창이 하나뜸 UI임
+
+Bootstrap 이용하기
+구글에서 Bootstrap 검색
+Bootstrap 사이트 들어가서 
+Documentation카테고리 클릭
+Css 파일 라이브러리 복사하고
+JS 파일 라이브러리 복사하고 
+두개를 메인페이지에 복사하면 Bootstrap 사용가능 버튼 복붙가능
+
+React는
+구글에서 React Bootstrap 검색해서 Get started 버튼 누르고 
+install 밑에 라이브러리 파일
+플러스 버튼 누르고 새로운 터미널에다 npm install react-bootstrap bootstrap 엔터
+하면 설치가 진행됨
+플러스버튼 누르고 이전터미널로 돌아가기
+그리고 React Bootstrap 홈페이지 가서 Getting Started 카테고리 버튼 누르고
+Css 밑에 보면
+이 라이브러리 복사 해서 public 폴더안 index.html에 링크 하는 부분에 집어넣기
+<link
+     rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css"
+      integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3"
+      crossorigin="anonymous"
+
+이제 App.js에 코딩을 할껀데 Bootstrap 잘 되는지 시험하기 위해
+구글에 Bootstrap 검색해서 홈페이지 들어와서 Documentation카테고리 클릭
+그리고 왼쪽에 원하는 것을 검색해서 라이브러리 적합한 것 찾아서 라이브러리 복사해서 App.js에 복사 붙여넣기 한다.
+
+
+
+
+
+
+App.js
+/* eslint-disable */
+
+import React, { useState } from 'react';
+import { Navbar, Container, Nav, NavDropdown, Button } from 'react-bootstrap';
+import './App.css';
+import Data from './data.js';
+function App() {
+
+  let [상품, 상품변경] = useState(Data);
+
+  return (
+    <div className="App">
+    <Navbar bg="light" expand="lg">
+  <Container>
+    <Navbar.Brand href="#home">Convienience Store NewFood</Navbar.Brand>
+    <Navbar.Toggle aria-controls="basic-navbar-nav" />
+    <Navbar.Collapse id="basic-navbar-nav">
+      <Nav className="me-auto">
+        <Nav.Link href="#home">Home</Nav.Link>
+        <Nav.Link href="#link">Link</Nav.Link>
+        <NavDropdown title="Dropdown" id="basic-nav-dropdown">
+          <NavDropdown.Item href="#action/3.1">Action</NavDropdown.Item>
+          <NavDropdown.Item href="#action/3.2">Another action</NavDropdown.Item>
+          <NavDropdown.Item href="#action/3.3">Something</NavDropdown.Item>
+          <NavDropdown.Divider />
+          <NavDropdown.Item href="#action/3.4">Separated link</NavDropdown.Item>
+        </NavDropdown>
+      </Nav>
+    </Navbar.Collapse>
+  </Container>
+</Navbar>
+
+<div className="background">
+  <br/>
+  <br/>
+  <h1>10% Season off</h1>
+  <p>
+    GS25, CU, SevenEleven
+  </p>
+  <p>
+    <Button bsStyle="primary">Learn more</Button>
+  </p>
+</div>
+<div className="container">
+  <div className="row">
+  <div className="col-md-4"><img alt="gs25" src="img/gs25NewFood.jpg" width="100%" height="80%"/>
+  <h4>{상품[0].title}</h4>
+  <p>{상품[0].content} & {상품[0].price}</p>
+  </div>
+  <div className="col-md-4"><img alt="cu" src="img/cuNewFood.jpg" width="100%" height="80%"/>
+  <h4>{상품[1].title}</h4>
+  <p>{상품[1].content} & {상품[1].price}</p>
+  </div>
+  <div className="col-md-4"><img alt="seveneleven" src="img/sevenelevenNewFood.jpg" width="100%" height="80%"/>
+  <h4>{상품[2].title}</h4>
+  <p>{상품[2].content} & {상품[2].price}</p>
+  </div>
+  </div>
+  </div>
+
+    </div>
+  );
+}
+
+function Card(){
+  return(
+    <div className="col-md-4">
+      <img alt="gs25" src="img/gs25NewFood.jpg" width="100%" height="80%"/>
+      <h4>{상품[0].title}</h4>
+      <p>{상품[0].content} & {상품[0].price}</p> 
+    </div>
+  )
+}
+
+export default App;
