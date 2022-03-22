@@ -1,0 +1,513 @@
+React 9일차
+
+React-bootstrap 사이트 들어가서 원하는 UI검색
+왼쪽 서치란에 navbar 검색하기
+그리고 검색하면 나오는거 여러개중 마음에 드는거 복사 붙여넣기 App.js에
+import React, { useState } from 'react';
+import { Navbar, Container, Nav, NavDropdown, Button } from 'react-bootstrap';  // bootstrap 사용하려면 복붙해온 대문자 전부 import해야 사용가능 옆에 참고 
+import './App.css';
+
+
+function App() {
+
+return (
+<div className="App">
+<Navbar bg="light" expand="lg">
+  <Container>
+    <Navbar.Brand href="#home">Convienience Store NewFood</Navbar.Brand>
+    <Navbar.Toggle aria-controls="basic-navbar-nav" />
+    <Navbar.Collapse id="basic-navbar-nav">
+      <Nav className="me-auto">
+        <Nav.Link href="#home">Home</Nav.Link>
+        <Nav.Link href="#link">Link</Nav.Link>
+        <NavDropdown title="Dropdown" id="basic-nav-dropdown">
+          <NavDropdown.Item href="#action/3.1">Action</NavDropdown.Item>
+          <NavDropdown.Item href="#action/3.2">Another action</NavDropdown.Item>
+          <NavDropdown.Item href="#action/3.3">Something</NavDropdown.Item>
+          <NavDropdown.Divider />
+          <NavDropdown.Item href="#action/3.4">Separated link</NavDropdown.Item>
+        </NavDropdown>
+      </Nav>
+    </Navbar.Collapse>
+  </Container>
+</Navbar>
+
+<div className="background"> //사진이나 배경을 넣어보자 App.css로 가서 작성해준다 적용은 div태그 안에 className=""이라고 적용하면된다.
+  <br/>
+  <br/>
+  <h1>10% Season off</h1>
+  <p>
+    GS25, CU, SevenEleven
+  </p>
+  <p>
+    <Button bsStyle="primary">Learn more</Button>
+  </p>
+</div>
+그다음 원조 bootstrap은 아래처럼 사용해도 된다 직접 써서
+상품명, 이미지 넣기
+<div className="container">
+  <div className="row">
+  <div className="col-md-4"><img src="https://rlaxo3814.github.io/images/gs25.jpg" width="100%" height="80%"/>
+  <h4>상품명</h4>
+  <p>상품설명 & 가격</p>
+  </div>
+  <div className="col-md-4"><img src="https://rlaxo3814.github.io/images/cu.jpg" width="100%" height="80%"/>
+    <h4>상품명</h4>
+  <p>상품설명 & 가격</p>
+  </div>
+  <div className="col-md-4"><img src="https://rlaxo3814.github.io/images//seven.jpg" width="100%" height="80%"/>
+   <h4>상품명</h4>
+  <p>상품설명 & 가격</p>
+  </div>
+  </div>
+  </div>
+</div>
+  );
+}
+
+App.css 가서 background  클래스를 작성해준다
+
+.background{
+  background-image: url('./store.jpg'); //이미지는 자신이 넣고 싶은이미지를 src폴더에 넣고 옆에처럼 해주면된다. //public 폴더에도 자료보관가능, src에 넣은 파일은 파일명 변경 + 압축됨
+  background-size: cover;
+  color: black;
+  height: 500px;
+  font-size: 50px;
+}
+
+실제 상품명 데이터를 박아 넣어보자
+App.js에 state로 저장하고 데이터 바인딩 하기
+let [상품, 상품변경] = useState(); //useState 쓸때는 항상 import 해오기-> //맨위에 적기 import React, { useState } from 'react';
+
+src폴더내에 data.js 파일 생성 
+밑에꺼 작성하기 data.js에
+
+export default
+[
+    {
+        id : 0,
+        title : "Gs25 샐러드 2종 ",
+        content : "기초, 실천",
+        price : 12000
+      },
+    
+      {
+        id : 1,
+        title : "Cu 케이크 2종",
+        content : "망고, 블루베리",
+        price : 11000
+      },
+    
+      {
+        id : 2,
+        title : "SevenEleven 샐러드 2종",
+        content : "에그마요, 햄&마카로니",
+        price : 13000
+      }
+
+
+]
+
+파일 쪼갤때 활용하는 import/export
+
+data.js
+
+var name = "Kim";
+
+export default name
+
+내보내기: export default 변수명
+
+App.js
+
+가져오기: import 변수명 from 경로
+
+import name from './data.js';
+
+그리고 App.js 아무데나
+{name} 쓰면 UI에 보임
+
+내보낼 변수가 많다면
+data.js
+var name = "Kim";
+var name2 = "Park"
+
+export {name, name2}
+
+내보내기: export{변수1, 변수2}
+가져오기: import{변수1, 변수2} from 경로
+
+App.js
+import {name, name2} from './data.js';
+
+그리고 아무데나
+{name, name2}
+쓰면 UI에 보인다.
+
+data.js에 보관한 뒤
+App.js로 보내려면?
+
+data.js 아래처럼 작성
+
+export default
+[
+    {
+        id : 0,
+        title : "Gs25 샐러드 2종 ",
+        content : "기초, 실천",
+        price : 12000
+      },
+    
+      {
+        id : 1,
+        title : "Cu 케이크 2종",
+        content : "망고, 블루베리",
+        price : 11000
+      },
+    
+      {
+        id : 2,
+        title : "SevenEleven 샐러드 2종",
+        content : "에그마요, 햄&마카로니",
+        price : 13000
+      }
+
+
+]
+
+App.js
+
+import Data from './data.js';
+
+let [상품, 상품변경] = useState(Data); // data.js에 있는 자료가 useState에 담겼다.
+
+아까 import해온 데이터로 상품명 데이터 바인딩해보자
+
+<div className="container">
+  <div className="row">
+  <div className="col-md-4"><img src="https://rlaxo3814.github.io/images/gs25.jpg" width="100%" height="80%"/>
+  <h4>{상품[0].title}</h4>
+  <p>{상품[0].content} & {상품[0].price}</p>
+  </div>
+  <div className="col-md-4"><img src="https://rlaxo3814.github.io/images/cu.jpg" width="100%" height="80%"/>
+  <h4>{상품[1].title}</h4>
+  <p>{상품[1].content} & {상품[1].price}</p>
+  </div>
+  <div className="col-md-4"><img src="https://rlaxo3814.github.io/images//seven.jpg" width="100%" height="80%"/>
+  <h4>{상품[2].title}</h4>
+  <p>{상품[2].content} & {상품[2].price}</p>
+  </div>
+
+App.js
+
+터미널에 Warning 뜨는것 보고 싶지 않을때 최상단에 /* eslint-disable */ 적기
+
+반복적인 HTML 요소가 많다면 반복문이나 component화 하기
+component에 데이터 바인딩 완료하기
+component를 반복문 돌리기
+
+[component 제작법]
+1.function 컴포넌트 이름(){}
+2.return(<div></div>)
+3.필요한 곳에 <컴포넌트이름/>
+
+App.js에
+아래처럼  작성하기
+
+function Card(){
+  return(
+    <div className="col-md-4">
+      <img alt="gs25" src="img/gs25NewFood.jpg" width="100%" height="80%"/>
+      <h4>{상품[0].title}</h4>
+      <p>{상품[0].content} & {상품[0].price}</p> 
+    </div>
+  )
+}
+
+여기에다 <Card/> 넣어보기 아마도 에러가 난다.
+<div className="container">
+  <div className="row">
+  <Card/>
+  </div>
+  <div className="col-md-4"><img src="https://rlaxo3814.github.io/images/cu.jpg" width="100%" height="80%"/>
+  <h4>{상품[1].title}</h4>
+  <p>{상품[1].content} & {상품[1].price}</p>
+  </div>
+  <div className="col-md-4"><img src="https://rlaxo3814.github.io/images//seven.jpg" width="100%" height="80%"/>
+  <h4>{상품[2].title}</h4>
+  <p>{상품[2].content} & {상품[2].price}</p>
+  </div>
+
+상품이라는 state는 부모 컴포넌트가 가지고 있음 그걸 자식 컴포넌트가 사용하고 싶으면 props로 전송해줘함
+[props 전송법]
+1.<자식컴포넌트 보낼이름 = {전송할state}/>
+2.function 자식컴포넌트(props){}
+
+아래처럼  App.js 에 작성하기
+
+function Card(props){
+  return(
+    <div className="col-md-4">
+      <img alt="gs25" src="img/gs25NewFood.jpg" width="100%" height="80%"/>
+      <h4>{props.상품[0].title}</h4>
+      <p>{props.상품[0].content} & {props.상품[0].price}</p> 
+    </div>
+  )
+}
+
+
+<div className="container">
+  <div className="row">
+  <Card 상품 = {상품}/>
+  <Card 상품 = {상품}/>
+  <Card 상품 = {상품}/>
+  </div>
+  </div>
+
+Card 마다 각각 다른 제목을 가져야 하는데?
+각각 컴포넌트 마다 다른 제목을 전달해 주면 되지 않을까
+<Card/> 마다 다른 상품 데이터 전달하기
+밑에처럼 저 부분들 고쳐 쓰기
+
+<div className="container">
+  <div className="row">
+  <Card 상품 = {상품[0]}/>
+  <Card 상품 = {상품[1]}/>
+  <Card 상품 = {상품[2]}/>
+  </div>
+  </div>
+
+function Card(props){
+  return(
+    <div className="col-md-4">
+      <img alt="gs25" src="img/gs25NewFood.jpg" width="100%" height="80%"/>
+      <h4>{props.상품.title}</h4>
+      <p>{props.상품.content} & {props.상품.price}</p> 
+    </div>
+  )
+}
+
+<Card/>3개를 반복문에 담아보기
+
+[map 반복문]
+
+1.자료.map(()=>{})
+2.return(반복시킬 HTML)
+3.반복하며 변해야하는 숫자체크
+
+<div className="container">
+  <div className="row">
+    {
+      상품.map((a, i)=>{
+        return <Card 상품 = {상품[i]}/> //i 는 반복문 돌때마다 0,1,2가 되는 변수
+      })
+    }
+  </div>
+  </div>
+
+반복문이 돌 때마다 1,2,3이 되는 변수를 이미지 에서 쓰고 싶음
+src=""에다 데이터 바인딩 하려면?
+src={} 이렇게 하면 변수명 함수명 넣기 가능
+텍스트 중간에 변수를 넣고 싶으면 '문자' + 변수 + '문자'
+부모가 가지고 있는 state, 변수 이런건 props로 전송해야 쓸 수 있죠
+
+[props 전송법]
+1.<자식컴포넌트 보낼이름={전송할state}/>
+2.function 자식컴포넌트(props){}
+3.props.보낼이름 사용
+
+왜 이런것을 하는건가
+-서버에서 사이트 구성에 필요한  데이터 받아온 후
+-HTML로 보여주는게 프론트엔드 개발자의 역할
+
+어렵게 반복문 안돌려도 되지 않을까?
+-데이터가 3개인걸 미리 알고 있으면 3번 손수 복붙해도 OK
+-갑자기 데이터가 4개가 되면?
+-갑자기 데이터가 4개가 되면? 손수 복붙 몇번해야할지 모름
+-상품 이라는 데이터 갯수 만큼  HTML을 생성해주세요~
+-반복시킨 HTML에는 key={} 이게 꼭 필요합니다.
+
+function Card(props){
+  return(
+    <div className="col-md-4">
+      <img src={ 'https://rlaxo3814.github.io/images/gs25' + 변수 + 'jpg'} width="100%" height="80%"/>
+      <h4>{props.상품.title}</h4>
+      <p>{props.상품.content} & {props.상품.price}</p> 
+    </div>
+  )
+}
+
+
+<div className="container">
+  <div className="row">
+    {
+      상품.map((a, i)=>{
+        return <Card 상품 = {상품[i]} i={i} key={i}/> //i={i} i는 i로 전송해줍니다 입력해야됨, 반복시킨 HTML에는 key={} 이게 꼭 필요합니다.
+      })
+    }
+  </div>
+  </div>
+
+function Card(props){
+  return(
+    <div className="col-md-4">
+      <img src={ 'https://rlaxo3814.github.io/images/gs25'  + (props.i + 1) +  '.jpg'}  width="100%" height="80%"/>
+      <h4>{props.상품.title}</h4>
+      <p>{props.상품.content} & {props.상품.price}</p> 
+    </div>
+  )
+}
+
+
+React 9일차 중간 코드
+App.js
+/* eslint-disable */
+
+import React, { useState } from 'react';
+import { Navbar, Container, Nav, NavDropdown, Button } from 'react-bootstrap';
+import './App.css';
+import Data from './data.js';
+function App() {
+
+  let [상품, 상품변경] = useState(Data);
+
+  return (
+    <div className="App">
+    <Navbar bg="light" expand="lg">
+  <Container>
+    <Navbar.Brand href="#home">Convienience Store NewFood</Navbar.Brand>
+    <Navbar.Toggle aria-controls="basic-navbar-nav" />
+    <Navbar.Collapse id="basic-navbar-nav">
+      <Nav className="me-auto">
+        <Nav.Link href="#home">Home</Nav.Link>
+        <Nav.Link href="#link">Link</Nav.Link>
+        <NavDropdown title="Dropdown" id="basic-nav-dropdown">
+          <NavDropdown.Item href="#action/3.1">Action</NavDropdown.Item>
+          <NavDropdown.Item href="#action/3.2">Another action</NavDropdown.Item>
+          <NavDropdown.Item href="#action/3.3">Something</NavDropdown.Item>
+          <NavDropdown.Divider />
+          <NavDropdown.Item href="#action/3.4">Separated link</NavDropdown.Item>
+        </NavDropdown>
+      </Nav>
+    </Navbar.Collapse>
+  </Container>
+</Navbar>
+
+<div className="background">
+  <br/>
+  <br/>
+  <h1>10% Season off</h1>
+  <p>
+    GS25, CU, SevenEleven
+  </p>
+  <p>
+    <Button bsStyle="primary">Learn more</Button>
+  </p>
+</div>
+<div className="container">
+  <div className="row">
+  <div className="col-md-4"><img src="https://rlaxo3814.github.io/images/gs25.jpg" width="100%" height="80%"/>
+  <h4>{상품[0].title}</h4>
+  <p>{상품[0].content} & {상품[0].price}</p>
+  </div>
+  <div className="col-md-4"><img src="https://rlaxo3814.github.io/images/cu.jpg" width="100%" height="80%"/>
+  <h4>{상품[1].title}</h4>
+  <p>{상품[1].content} & {상품[1].price}</p>
+  </div>
+  <div className="col-md-4"><img src="https://rlaxo3814.github.io/images//seven.jpg" width="100%" height="80%"/>
+  <h4>{상품[2].title}</h4>
+  <p>{상품[2].content} & {상품[2].price}</p>
+  </div>
+  </div>
+  </div>
+
+    </div>
+  );
+}
+
+function Card(){
+  return(
+    <div className="col-md-4">
+      <img alt="gs25" src="img/gs25NewFood.jpg" width="100%" height="80%"/>
+      <h4>{상품[0].title}</h4>
+      <p>{상품[0].content} & {상품[0].price}</p> 
+    </div>
+  )
+}
+
+export default App;
+
+
+
+
+
+React 9일차 결과물 코드
+
+/* eslint-disable */
+
+import React, { useState } from 'react';
+import { Navbar, Container, Nav, NavDropdown, Button } from 'react-bootstrap';
+import './App.css';
+import Data from './data.js';
+function App() {
+
+  let [상품, 상품변경] = useState(Data);
+
+  return (
+    <div className="App">
+    <Navbar bg="light" expand="lg">
+  <Container>
+    <Navbar.Brand href="#home">Convienience Store NewFood</Navbar.Brand>
+    <Navbar.Toggle aria-controls="basic-navbar-nav" />
+    <Navbar.Collapse id="basic-navbar-nav">
+      <Nav className="me-auto">
+        <Nav.Link href="#home">Home</Nav.Link>
+        <Nav.Link href="#link">Link</Nav.Link>
+        <NavDropdown title="Dropdown" id="basic-nav-dropdown">
+          <NavDropdown.Item href="#action/3.1">Action</NavDropdown.Item>
+          <NavDropdown.Item href="#action/3.2">Another action</NavDropdown.Item>
+          <NavDropdown.Item href="#action/3.3">Something</NavDropdown.Item>
+          <NavDropdown.Divider />
+          <NavDropdown.Item href="#action/3.4">Separated link</NavDropdown.Item>
+        </NavDropdown>
+      </Nav>
+    </Navbar.Collapse>
+  </Container>
+</Navbar>
+
+<div className="background">
+  <br/>
+  <br/>
+  <h1>10% Season off</h1>
+  <p>
+    GS25, CU, SevenEleven
+  </p>
+  <p>
+    <Button bsStyle="primary">Learn more</Button>
+  </p>
+</div>
+<div className="container">
+  <div className="row">
+    {
+      상품.map((a, i)=>{
+        return <Card 상품 = {상품[i]} i={i} key={i}/>
+      })
+    }
+  </div>
+  </div>
+
+    </div>
+  );
+}
+
+function Card(props){
+  return(
+    <div className="col-md-4">
+      <img src={ 'https://rlaxo3814.github.io/images/gs25'  + (props.i + 1) +  '.jpg'}  width="100%" height="80%"/>
+      <h4>{props.상품.title}</h4>
+      <p>{props.상품.content} & {props.상품.price}</p> 
+    </div>
+  )
+}
+
+export default App;
