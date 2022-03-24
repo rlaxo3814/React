@@ -1,0 +1,264 @@
+React 10일차
+
+페이지 나누기 (라우팅)
+React를 키고
+터미널에다 yarn add react-router-dom@5.2.0 엔터
+
+react-router-dom 초기 셋팅법
+
+index.js파일 들어가서
+아래에 있는 내용 모두 다써주기
+
+import {BrowserRouter} from 'react-router-dom'; //라이브러리 이름
+
+ReactDOM.render(
+  <React.StrictMode>
+    <BrowserRouter>
+    <App />
+    </BrowserRouter>
+  </React.StrictMode>,
+  document.getElementById('root')
+);
+
+BrowserRouter vs HashRouter
+
+ReactDOM.render(
+  <React.StrictMode>
+    <HashRouter>
+    <App />
+    </HashRouter>
+  </React.StrictMode>,
+  document.getElementById('root')
+);
+
+HashRouter : 라우팅 안전하게 할 수 있게 도와줌
+사이트 주소 뒤에 #이 붙는데 
+#뒤에 적는 것은 서버로 전달 X
+그래서 라우팅은 리액트가 알라서 잘 해줄 수 있음
+
+BrowserRouter: 라우팅을 리액트가 아니라 
+서버에게 요청할 수도 있어서 위험
+
+App.js 파일로 돌와와서
+
+Route를 만들어보자
+(페이지를 나누자)
+
+-메인페이지
+-상품상세페이지
+
+
+App.js 파일에서
+밑에 내용 다 입력하기
+2.<Route path="/경로"></Route>
+	<Route> 안에 HTML 적기
+
+import {Link, Route, Switch} from 'react-router-dom';
+
+<Route path="/">
+<div>메인페이지입니다.</div>
+</Route>
+ <Route path="/detail">
+<div>상세페이지입니다.</div>
+</Route>
+ 
+작성한다음
+/로 접속하면 메인페이지
+/detail로 접속하면 상품 상세페이지 잘보임
+
+
+**************************************************
+여기서 인터넷 접속 에러가 뜬다 그러면
+visual Studio code 맨위에 카테고리중 실행 버튼누르고 디버깅 시작 버튼 클릭 화면이 뜨고 톱니바퀴 버튼 클릭하고
+launch.json 파일 들어가서 아래처럼 해주면 화면이 잘뜬다!!
+
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "type": "pwa-chrome",
+            "request": "launch",
+            "name": "Launch Chrome against localhost",
+            //"url": "http://localhost:8080",
+            //"webRoot": "${workspaceFolder}"
+            "file": "${workspaceFolder}/index.html"
+
+        }
+    ]
+}
+
+<div></div> 자리에 메인페이지 HTML추가
+<div></div> 자리에 상세페이지 HTML추가
+
+Route 쓰는 다른 방법
+<Route path="어쩌구" component={Mode}></Route>
+
+/detail 경로로 접속해도 /경로 내용이 보이는 이유?
+안보이게 하려면 
+<Route  exact path="/"> // exact추가 하면됨(경로가 정확히 일치할 때만 보여줌
+
+
+<Route  exact path="/">
+<div>메인페이지입니다.</div>
+</Route>
+ <Route path="/detail">
+<div>상세페이지입니다.</div>
+</Route>
+
+페이지 별로 HTML 내용 완성하기
+
+
+메인페이지
+<Route exact path="/">
+<div className="background">
+  <br/>
+  <br/>
+  <h1>10% Season off</h1>
+  <p>
+    GS25, CU, SevenEleven
+  </p>
+  <p>
+    <Button bsStyle="primary">Learn more</Button>
+  </p>
+</div>
+
+<div className="container">
+  <div className="row">
+  <div className="col-md-4"><img src="https://rlaxo3814.github.io/images/gs25.jpg" width="100%" height="80%"/>
+  <h4>{상품[0].title}</h4>
+  <p>{상품[0].content} & {상품[0].price}</p>
+  </div>
+  <div className="col-md-4"><img src="https://rlaxo3814.github.io/images/cu.jpg" width="100%" height="80%"/>
+  <h4>{상품[1].title}</h4>
+  <p>{상품[1].content} & {상품[1].price}</p>
+  </div>
+  <div className="col-md-4"><img src="https://rlaxo3814.github.io/images//seven.jpg" width="100%" height="80%"/>
+  <h4>{상품[2].title}</h4>
+  <p>{상품[2].content} & {상품[2].price}</p>
+  </div>
+  </div>
+  </div>
+  </Route>
+
+상세페이지
+<Route path="/detail">
+  <div className="container">
+      <div className="row">
+        <div className="col-md-6">
+          <img src="https://rlaxo3814.github.io/images/gs25.jpg" width="100%"  />
+        </div>
+        <div className="col-md-6 mt-4">
+          <h4 className="pt-5">상품명</h4>
+          <p>상품설명</p>
+          <p>12000원</p>
+          <button className="btn btn-danger">주문하기</button> 
+        </div>
+      </div>
+</div> 
+  </Route>
+
+-Route 만들어 놓으면 뒤로가기/앞으로가기 작동한다.
+<React Router 특징>
+페이지마다 다른 HTML파일이 아닙니다.
+HTML 내부의 내용을 갈아치워서 다른페이지처럼 보여주는것
+
+React 10일차 결과물 코드
+
+/* eslint-disable */
+
+import React, { useState } from 'react';
+import { Navbar, Container, Nav, NavDropdown, Button } from 'react-bootstrap';
+import './App.css';
+import Data from './data.js';
+
+import {Link, Route, Switch} from 'react-router-dom';
+
+function App() {
+
+  let [상품, 상품변경] = useState(Data);
+
+  return (
+    <div className="App">
+    <Navbar bg="light" expand="lg">
+  <Container>
+    <Navbar.Brand href="#home">Convienience Store NewFood</Navbar.Brand>
+    <Navbar.Toggle aria-controls="basic-navbar-nav" />
+    <Navbar.Collapse id="basic-navbar-nav">
+      <Nav className="me-auto">
+        <Nav.Link href="#home">Home</Nav.Link>
+        <Nav.Link href="#link">Link</Nav.Link>
+        <NavDropdown title="Dropdown" id="basic-nav-dropdown">
+          <NavDropdown.Item href="#action/3.1">Action</NavDropdown.Item>
+          <NavDropdown.Item href="#action/3.2">Another action</NavDropdown.Item>
+          <NavDropdown.Item href="#action/3.3">Something</NavDropdown.Item>
+          <NavDropdown.Divider />
+          <NavDropdown.Item href="#action/3.4">Separated link</NavDropdown.Item>
+        </NavDropdown>
+      </Nav>
+    </Navbar.Collapse>
+  </Container>
+</Navbar>
+
+
+<Route exact path="/">
+<div className="background">
+  <br/>
+  <br/>
+  <h1>10% Season off</h1>
+  <p>
+    GS25, CU, SevenEleven
+  </p>
+  <p>
+    <Button bsStyle="primary">Learn more</Button>
+  </p>
+</div>
+
+<div className="container">
+  <div className="row">
+  <div className="col-md-4"><img src="https://rlaxo3814.github.io/images/gs25.jpg" width="100%" height="80%"/>
+  <h4>{상품[0].title}</h4>
+  <p>{상품[0].content} & {상품[0].price}</p>
+  </div>
+  <div className="col-md-4"><img src="https://rlaxo3814.github.io/images/cu.jpg" width="100%" height="80%"/>
+  <h4>{상품[1].title}</h4>
+  <p>{상품[1].content} & {상품[1].price}</p>
+  </div>
+  <div className="col-md-4"><img src="https://rlaxo3814.github.io/images//seven.jpg" width="100%" height="80%"/>
+  <h4>{상품[2].title}</h4>
+  <p>{상품[2].content} & {상품[2].price}</p>
+  </div>
+  </div>
+  </div>
+  </Route>
+
+  <Route path="/detail">
+  <div className="container">
+      <div className="row">
+        <div className="col-md-6">
+          <img src="https://rlaxo3814.github.io/images/gs25.jpg" width="100%"  />
+        </div>
+        <div className="col-md-6 mt-4">
+          <h4 className="pt-5">상품명</h4>
+          <p>상품설명</p>
+          <p>12000원</p>
+          <button className="btn btn-danger">주문하기</button> 
+        </div>
+      </div>
+</div> 
+  </Route>
+  {/*<Route path = "/" component={Mode}></Route>*/}
+
+    </div>
+  );
+}
+
+function Card(){
+  return(
+    <div className="col-md-4">
+      <img alt="gs25" src="img/gs25NewFood.jpg" width="100%" height="80%"/>
+      <h4>{상품[0].title}</h4>
+      <p>{상품[0].content} & {상품[0].price}</p> 
+    </div>
+  )
+}
+
+export default App;
