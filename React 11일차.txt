@@ -1,0 +1,312 @@
+React 11일차
+
+상세페이지를 컴포넌트화 합시다
+-function 컴포넌트명(){}
+-근데 다른파일로 빼보자(import/export)
+
+src폴더에 Detail.js 파일 만들어서 아래 항목들 붙여넣기(보통 컴포넌트 파일은 대문자로 하고 파일명도 똑같이 해준다)
+컴포넌트 파일 만들 때는 import React 꼭 해오기
+
+
+
+import React, { useState } from 'react';
+
+function Detail(){
+
+    let history = useHistory();
+
+    return(
+      <div className="container">
+        <div className="row">
+          <div className="col-md-6">
+            <img src="https://rlaxo3814.github.io/images/gs25.jpg" width="100%"  />
+          </div>
+          <div className="col-md-6 mt-4">
+            <h4 className="pt-5">상품명</h4>
+            <p>상품설명</p>
+            <p>12000원</p>
+            <button className="btn btn-danger">주문하기</button>
+            <button className="btn btn-danger" onClick={()=>{
+                history.goBack();
+            }}>뒤로가기</button>  
+          </div>
+        </div>
+    </div> 
+    )
+  }
+
+  export default Detail; //익스포트 디폴트 함수명(변수명) 적어주면 임포트 할 수 있음
+
+그다음 위에 파일(Detail.js)을 App.js에 갖다 쓰고 싶다 그러면
+App.js 가서 밑에꺼 입력
+
+import Detail from './Detail.js';
+
+<Route path="/detail">
+	<Detail/>
+</Route>
+
+Detail.js에 있던 컴포넌트를 import 해와서 쓰는중
+
+src내에 컴포넌트 파일만 모아놓은 폴더를 만들기도 합니다.
+
+********
+페이지 이동한는 버튼 만들기
+일단 <Navbar>안의 버튼에 href 지우고
+-<Link to="경로">버튼</Link>
+
+App.js
+
+function App() {
+
+  let [상품, 상품변경] = useState(Data);
+
+  return (
+    <div className="App">
+    <Navbar bg="light" expand="lg">
+  <Container>
+    <Navbar.Brand href="#home">Convienience Store NewFood</Navbar.Brand>
+    <Navbar.Toggle aria-controls="basic-navbar-nav" />
+    <Navbar.Collapse id="basic-navbar-nav">
+      <Nav className="me-auto">
+        <Nav.Link><Link to="/">Home</Link></Nav.Link> // href 속성 지우고 <Link to="/">Home</Link> 
+        <Nav.Link><Link to="/detail">Detail</Link></Nav.Link>// href 속성 지우고 <Link to="/detail">Detail</Link>
+        <NavDropdown title="Dropdown" id="basic-nav-dropdown">
+          <NavDropdown.Item href="#action/3.1">Action</NavDropdown.Item>
+          <NavDropdown.Item href="#action/3.2">Another action</NavDropdown.Item>
+          <NavDropdown.Item href="#action/3.3">Something</NavDropdown.Item>
+          <NavDropdown.Divider />
+          <NavDropdown.Item href="#action/3.4">Separated link</NavDropdown.Item>
+        </NavDropdown>
+      </Nav>
+    </Navbar.Collapse>
+  </Container>
+</Navbar>
+
+페이지 이동시키는 다른 방법
+
+Detail 페이지에 뒤로가기 버튼 만들기
+
+Detail.js
+
+  <button className="btn btn-danger" onClick={()=>{}}>뒤로가기</button>
+
+let history = useHistory(); //작성하기 history는 방문기록을 저장해놓는 object
+
+import { useHistory } from 'react-router-dom'; //작성하기
+
+ <button className="btn btn-danger" onClick={()=>{
+                history.goBack(); //history.goBack(); 뒤로가기 임
+            }}>뒤로가기</button> 
+
+1.useHistory라는 훅 import
+2.useHistory()훅 사용
+
+특정 경로로 이동시키려면
+
+ <button className="btn btn-danger" onClick={()=>{
+                history.push(); //history.push('/sss'); 특정경로로 이동됨(sss라는 경로로)
+            }}>뒤로가기</button> 
+
+Switch 컴포넌트
+
+여러개가 맞아도 하나만 보여주세요~
+
+App.js 에다 Router 하나다 더 만들기
+
+ <Route path="/:id"> // /모든문자 라는 경로를 의미
+  <div>
+    아무거나 적었을때 보여주삼
+  </div>
+  </Route>
+
+
+이렇게 입력하면 /detail 접속시 이것도 보이고 이것도 보이고 다보인다.
+
+<Switch>
+
+<Route exact path="/">
+<div className="background">
+  <br/>
+  <br/>
+  <h1>10% Season off</h1>
+  <p>
+    GS25, CU, SevenEleven
+  </p>
+  <p>
+    <Button bsStyle="primary">Learn more</Button>
+  </p>
+</div>
+
+<div className="container">
+  <div className="row">
+  <div className="col-md-4"><img src="https://rlaxo3814.github.io/images/gs25.jpg" width="100%" height="80%"/>
+  <h4>{상품[0].title}</h4>
+  <p>{상품[0].content} & {상품[0].price}</p>
+  </div>
+  <div className="col-md-4"><img src="https://rlaxo3814.github.io/images/cu.jpg" width="100%" height="80%"/>
+  <h4>{상품[1].title}</h4>
+  <p>{상품[1].content} & {상품[1].price}</p>
+  </div>
+  <div className="col-md-4"><img src="https://rlaxo3814.github.io/images//seven.jpg" width="100%" height="80%"/>
+  <h4>{상품[2].title}</h4>
+  <p>{상품[2].content} & {상품[2].price}</p>
+  </div>
+  </div>
+  </div>
+  </Route>
+
+  <Route path="/detail">
+
+  <Detail/>
+
+  </Route>
+
+  <Route path="/:id">
+  <div>
+    아무거나 적었을때 보여주삼
+  </div>
+  </Route>
+
+  </Switch> //Switch  안에 담았더니 Route 들이 하나씩만 보임
+
+
+
+결과물 코드
+App.js
+/* eslint-disable */
+
+import React, { useState } from 'react';
+import { Navbar, Container, Nav, NavDropdown, Button } from 'react-bootstrap';
+import './App.css';
+import Data from './data.js';
+import Detail from'./Detail.js';
+
+import {Link, Route, Switch} from 'react-router-dom';
+
+function App() {
+
+  let [상품, 상품변경] = useState(Data);
+
+  return (
+    <div className="App">
+    <Navbar bg="light" expand="lg">
+  <Container>
+    <Navbar.Brand href="#home">Convienience Store NewFood</Navbar.Brand>
+    <Navbar.Toggle aria-controls="basic-navbar-nav" />
+    <Navbar.Collapse id="basic-navbar-nav">
+      <Nav className="me-auto">
+        <Nav.Link><Link to="/">Home</Link></Nav.Link>
+        <Nav.Link><Link to="/detail">Detail</Link></Nav.Link>
+        <NavDropdown title="Dropdown" id="basic-nav-dropdown">
+          <NavDropdown.Item href="#action/3.1">Action</NavDropdown.Item>
+          <NavDropdown.Item href="#action/3.2">Another action</NavDropdown.Item>
+          <NavDropdown.Item href="#action/3.3">Something</NavDropdown.Item>
+          <NavDropdown.Divider />
+          <NavDropdown.Item href="#action/3.4">Separated link</NavDropdown.Item>
+        </NavDropdown>
+      </Nav>
+    </Navbar.Collapse>
+  </Container>
+</Navbar>
+
+<Switch>
+
+<Route exact path="/">
+<div className="background">
+  <br/>
+  <br/>
+  <h1>10% Season off</h1>
+  <p>
+    GS25, CU, SevenEleven
+  </p>
+  <p>
+    <Button bsStyle="primary">Learn more</Button>
+  </p>
+</div>
+
+<div className="container">
+  <div className="row">
+  <div className="col-md-4"><img src="https://rlaxo3814.github.io/images/gs25.jpg" width="100%" height="80%"/>
+  <h4>{상품[0].title}</h4>
+  <p>{상품[0].content} & {상품[0].price}</p>
+  </div>
+  <div className="col-md-4"><img src="https://rlaxo3814.github.io/images/cu.jpg" width="100%" height="80%"/>
+  <h4>{상품[1].title}</h4>
+  <p>{상품[1].content} & {상품[1].price}</p>
+  </div>
+  <div className="col-md-4"><img src="https://rlaxo3814.github.io/images//seven.jpg" width="100%" height="80%"/>
+  <h4>{상품[2].title}</h4>
+  <p>{상품[2].content} & {상품[2].price}</p>
+  </div>
+  </div>
+  </div>
+  </Route>
+
+  <Route path="/detail">
+
+  <Detail/>
+
+  </Route>
+
+  <Route path="/:id">
+  <div>
+    아무거나 적었을때 보여주삼
+  </div>
+  </Route>
+
+  </Switch>
+  {/*<Route path = "/" component={Mode}></Route>*/}
+
+  
+
+    </div>
+  );
+}
+
+function Card(){
+  return(
+    <div className="col-md-4">
+      <img alt="gs25" src="img/gs25NewFood.jpg" width="100%" height="80%"/>
+      <h4>{상품[0].title}</h4>
+      <p>{상품[0].content} & {상품[0].price}</p> 
+    </div>
+  )
+}
+
+export default App;
+
+
+
+
+Detail.js
+
+import React, { useState } from 'react';
+import { useHistory } from 'react-router-dom';
+
+function Detail(){
+
+    let history = useHistory();
+
+    return(
+      <div className="container">
+        <div className="row">
+          <div className="col-md-6">
+            <img src="https://rlaxo3814.github.io/images/gs25.jpg" width="100%"  />
+          </div>
+          <div className="col-md-6 mt-4">
+            <h4 className="pt-5">상품명</h4>
+            <p>상품설명</p>
+            <p>12000원</p>
+            <button className="btn btn-danger">주문하기</button>
+            <button className="btn btn-danger" onClick={()=>{
+                history.goBack();
+            }}>뒤로가기</button>  
+          </div>
+        </div>
+    </div> 
+    )
+  }
+
+  export default Detail;
+
