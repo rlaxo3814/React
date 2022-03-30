@@ -1,0 +1,445 @@
+React 13일차
+
+Component 가 많아지면  Css 작성 고민이 많아짐 
+
+터미널에다 yarn add styled-components 라고 치기 설치 진행
+
+import styled from 'styled-components';
+
+컴포넌트에 직접 스타일 넣어서 스타일링 하기
+
+Detail.js
+
+let 박스 = styled.div`
+	padding : 20px;
+`;
+
+let 제목 = styled.h4`
+	font-size : 25px;
+`;
+
+let 제목2 = styled.h4`
+	font-size : 25px;
+	color : red;
+`;
+
+<박스>
+	<제목>상세페이지</제목>
+</박스> //CSS를 미리 입혀놓은 컴포넌트
+
+색깔만 다른 제목이 여러게 필요하다면?
+
+let 제목 = styled.h4`
+	font-size : 25px;
+	color : ${props => props.색상}  //`글자${변수명}글자`
+`;
+
+<박스>
+	<제목 색상={'red'}>상세페이지</제목> //props 문법임
+</박스> //CSS를 미리 입혀놓은 컴포넌트
+
+props 문법
+보낼이름 = {변수명}
+보낼이름 = "일반문자"
+
+SASS를 쓰고 싶을때 설치하는법 +  간단한 문법
+
+터미널에 yarn add node-sass 치기, 또는 npm install node-sass
+
+브라우저는 SASS 문법 몰라요
+SASS로 작성한 파일을 다시 CSS로 컴파일해야함
+(node-sass 설치하면 알아서 해줌)
+
+src폴더에 Detail.css 생성
+(Detail.js 스타일링용)
+
+Detail.js 파일에다 적기
+
+import './Detail.css';
+
+<박스>
+	<제목 className="red">상세페이지</제목> 
+</박스> //CSS를 미리 입혀놓은 컴포넌트
+
+Detail.css 파일가서 적기
+
+.red{
+ color : red;
+
+}
+
+그리고 CSS 파일을 .scss로 바꾼다
+
+그리고 import'./Detail.scss'; 로 바꾼다
+
+Detail.sass 파일 가서 적기
+
+모든페이지에 필요한 CSS reset 이런것들
+
+body{
+	margin : 0;
+}
+
+div{
+	box-sizing : border-box;
+}
+
+$메인칼라 : #ff0000; 
+
+.red{
+ color : $메인칼라;
+
+}
+
+SASS 문법
+1.변수에 데이터를 저장해서 쓰자
+
+
+
+파일 하나 더 만들기
+
+src폴더에 reset.sass 파일 만들기 밑에꺼 작성
+
+body{
+	margin : 0;
+}
+
+div{
+	box-sizing : border-box;
+}
+
+
+SASS 문법
+2.@import 파일경로
+
+그리고 
+Detail.js 파일가서 작성
+
+@import './reset.scss';
+
+$메인칼라 : #ff0000; 
+
+.red{
+ color : $메인칼라;
+
+}
+
+SASS 문법
+3.nesting
+
+div.container h4{
+	color : blue;
+}
+
+div.container p{
+	color : green;
+}
+
+
+SASS 문법
+4. 셀렉터 대신 쓰는 nesting
+
+div.container {
+	h4{
+	color : blue;
+}
+}
+
+div.container {
+	p{
+	color : green;
+}	
+}
+
+SASS 문법
+일단 잠깐 alert UI 디자인
+
+Deatil. js 파일가서
+
+<박스>
+	<제목 className="red">상세페이지</제목> 
+</박스> //CSS를 미리 입혀놓은 컴포넌트
+<div className="my-alert">
+	<p>재고가 얼마 남지 않았습니다</p>
+</div>
+
+Detail.sass 파일가서 작성
+
+.my-alert{
+	background :  #eeeeee;
+	padding : 20px;
+	border-radius: 5px;
+	max-width: 100%
+	margin: auto;
+}
+
+.my-alert p{
+	margin-bottom: 0;
+}
+
+다른 색상의 alert UI가 필요하면?
+chobo) 복붙하기
+
+.my-alert2{
+	background :  #eeeeee;
+	padding : 20px;
+	border-radius: 5px;
+	max-width: 100%
+	margin: auto;
+}
+
+그런데 SASS 문법을 알면 조금 더 효율적임
+5. 복붙하지 말고 @extend
+
+.my-alert2{
+	@extend .my-alert;
+	background: #ffe591;
+}
+
+Deatil. js 파일가서
+
+<박스>
+	<제목 className="red">상세페이지</제목> 
+</박스> //CSS를 미리 입혀놓은 컴포넌트
+<div className="my-alert2">// 하면 색깔이 바뀜
+	<p>재고가 얼마 남지 않았습니다</p>
+</div>
+
+SASS문법
+6. 함수는 @mixin/@include
+
+@mixin 함수(){
+	.my-alert{
+	background :  #eeeeee;
+	padding : 20px;
+	border-radius: 5px;
+	max-width: 100%
+	margin: auto;
+}
+
+
+.my-alert{
+	@include 함수()
+}
+
+
+
+
+
+
+
+결과물 코드
+
+App.js
+
+/* eslint-disable */
+
+import React, { useState } from 'react';
+import { Navbar, Container, Nav, NavDropdown, Button } from 'react-bootstrap';
+import './App.css';
+import Data from './data.js';
+import Detail from'./Detail.js';
+
+import {Link, Route, Switch} from 'react-router-dom';
+
+function App() {
+
+  let [상품, 상품변경] = useState(Data);
+
+  return (
+    <div className="App">
+    <Navbar bg="light" expand="lg">
+  <Container>
+    <Navbar.Brand href="#home">Convienience Store NewFood</Navbar.Brand>
+    <Navbar.Toggle aria-controls="basic-navbar-nav" />
+    <Navbar.Collapse id="basic-navbar-nav">
+      <Nav className="me-auto">
+        <Nav.Link><Link to="/">Home</Link></Nav.Link>
+        <Nav.Link><Link to="/detail">Detail</Link></Nav.Link>
+        <NavDropdown title="Dropdown" id="basic-nav-dropdown">
+          <NavDropdown.Item href="#action/3.1">Action</NavDropdown.Item>
+          <NavDropdown.Item href="#action/3.2">Another action</NavDropdown.Item>
+          <NavDropdown.Item href="#action/3.3">Something</NavDropdown.Item>
+          <NavDropdown.Divider />
+          <NavDropdown.Item href="#action/3.4">Separated link</NavDropdown.Item>
+        </NavDropdown>
+      </Nav>
+    </Navbar.Collapse>
+  </Container>
+</Navbar>
+
+<Switch>
+
+<Route exact path="/">
+<div className="background">
+  <br/>
+  <br/>
+  <h1>10% Season off</h1>
+  <p>
+    GS25, CU, SevenEleven
+  </p>
+  <p>
+    <Button bsStyle="primary">Learn more</Button>
+  </p>
+</div>
+
+<div className="container">
+  <div className="row">
+  <div className="col-md-4"><img src="https://rlaxo3814.github.io/images/gs25.jpg" width="100%" height="80%"/>
+  <h4>{상품[0].title}</h4>
+  <p>{상품[0].content} & {상품[0].price}</p>
+  </div>
+  <div className="col-md-4"><img src="https://rlaxo3814.github.io/images/cu.jpg" width="100%" height="80%"/>
+  <h4>{상품[1].title}</h4>
+  <p>{상품[1].content} & {상품[1].price}</p>
+  </div>
+  <div className="col-md-4"><img src="https://rlaxo3814.github.io/images//seven.jpg" width="100%" height="80%"/>
+  <h4>{상품[2].title}</h4>
+  <p>{상품[2].content} & {상품[2].price}</p>
+  </div>
+  </div>
+  </div>
+  </Route>
+
+  <Route path="/detail/:id">
+  <Detail 상품={상품}/>
+  </Route>
+
+  <Route path="/:id">
+  <div>
+    아무거나 적었을때 보여주삼
+  </div>
+  </Route>
+
+  </Switch>
+  {/*<Route path = "/" component={Mode}></Route>*/}
+
+  
+
+    </div>
+  );
+}
+
+function Card(){
+  return(
+    <div className="col-md-4">
+      <img alt="gs25" src="img/gs25NewFood.jpg" width="100%" height="80%"/>
+      <h4>{상품[0].title}</h4>
+      <p>{상품[0].content} & {상품[0].price}</p> 
+    </div>
+  )
+}
+
+export default App;
+
+
+
+
+Detail.js
+
+import React, { useState } from 'react';
+import { useHistory, useParams } from 'react-router-dom';
+import styled from 'styled-components';
+import './Detail.scss';
+
+let 박스 = styled.div`
+  padding : 20px;
+
+`;
+
+let 제목 = styled.h4`
+ font-size : 25px;
+ color : ${ props => props.색상 }
+`;
+
+
+function Detail(props){
+
+    let { id } = useParams();
+    let history = useHistory();
+    let 찾은상품 = props.상품.find(function(상품){
+      return 상품.id == id
+    });
+
+    return(
+      <div className="container">
+        <박스>
+        <제목 className="red">GS25</제목>
+        </박스>
+        
+        <div className="row">
+          <div className="col-md-6">
+            <img src="https://rlaxo3814.github.io/images/gs25.jpg" width="100%"  />
+          </div>
+          <div className="col-md-6 mt-4">
+          <div className="my-alert2">
+          <p>재고가 얼마 남지 않았습니다</p>
+          </div>
+            <h4 className="pt-5">{찾은상품.title}</h4>
+            <p>{찾은상품.content}</p>
+            <p>{찾은상품.price}</p>
+            <button className="btn btn-danger">주문하기</button>
+            <button className="btn btn-danger" onClick={()=>{
+                history.goBack();
+            }}>뒤로가기</button>  
+          </div>
+        </div>
+    </div> 
+    )
+  }
+
+  export default Detail;
+
+
+
+Detail.sass
+
+@import './reset.scss';
+
+
+$메인칼라 : red;
+
+
+.red{
+    color : $메인칼라;
+}
+
+div.container {
+    h4{
+        color : green;
+    }
+}
+
+div.container {
+    p{
+        color : black;
+    }
+    
+}
+
+@mixin 함수(){
+    background: #eeeeee;
+    padding: 20px;
+    border-radius: 5px;
+    max-width: 500px;
+    width: 100%;
+    margin: auto;
+
+}
+
+.my-alert{
+    @include 함수()
+
+}
+
+.my-alert2{
+    @extend .my-alert;
+    background: #ffe591;
+}
+
+
+
+.my-alert p{
+    margin-bottom : 0;
+}
+
